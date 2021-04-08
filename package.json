@@ -1,6 +1,6 @@
 {
   "name": "@cihad/slate-balloon-toolbar",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "public": true,
   "main": "./dist/index.js",
   "dependencies": {
