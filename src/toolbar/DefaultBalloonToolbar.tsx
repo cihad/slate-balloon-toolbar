@@ -1,26 +1,18 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Node, Path } from 'slate'
+import { useEffect, useRef } from 'react'
+import { Node } from 'slate'
 import { ReactEditor, useSlate } from 'slate-react'
-import styles from './DefaultToolbar.module.css'
-import { ToolbarComponentProps } from './ToolbarProvider'
+import { css } from '@emotion/css'
+import { BalloonToolbarComponentProps } from './types'
 
-export const DefaultToolbar: React.FunctionComponent<ToolbarComponentProps> = ({ elements }) => {
+export const DefaultBalloonToolbar = (props: BalloonToolbarComponentProps) => {
+	const { children, path, show } = props
 	const editor = useSlate()
 	const toolbarRef = useRef<HTMLDivElement>(null)
-	const [lowestPath, setLowestPath] = useState<Path|null>(null)
 
 	useEffect(() => {
-		if (elements.length) {
-			setLowestPath(elements[0].path)
-		} else {
-			setLowestPath(null)
-		}
-	}, [elements])
-
-	useEffect(() => {
-		if (!lowestPath) return
+		if (!path) return
 		if (!toolbarRef.current) return
-		const node = Node.get(editor, lowestPath)
+		const node = Node.get(editor, path)
 		const elementDOM = ReactEditor.toDOMNode(editor as ReactEditor, node)
 		;(toolbarRef.current as HTMLElement).style.removeProperty('transform')
 		const {
@@ -43,14 +35,28 @@ export const DefaultToolbar: React.FunctionComponent<ToolbarComponentProps> = ({
 			'width',
 			`${targetWidth}px`
 		)
-	}, [lowestPath])
+	}, [editor, path])
 
-  return (
-    <div
-		className={`${styles.toolbar} ${elements.length ? '' : styles.hide}`}
-		ref={toolbarRef}
-    >
-    	{elements.map(({ toolbar }) => toolbar)}
-    </div>
-  )
+
+	if (!show) return null
+
+	return (
+		<div
+			onMouseDown={(e) => {e.preventDefault()}}
+			className={css`
+				position: absolute;
+				display: flex;
+				background: black;
+				color: #f0f0f0;
+				padding: 5px;
+				height: 30px;
+				box-sizing: border-box;
+				border-radius: 4px;
+				z-index: 1;
+			`}
+			ref={toolbarRef}
+		>
+			{children}
+		</div>
+	)
 }
