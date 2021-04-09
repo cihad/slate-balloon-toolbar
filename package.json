@@ -33,6 +33,7 @@
     "start": "react-scripts start",
     "build": "react-scripts build",
     "build:tsc": "rm -rf build && tsc --build \"./tsconfig.build.json\"",
+    "build:rollup": "rm -rf lib && rollup -c",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "predeploy": "npm run build",
@@ -56,5 +57,8 @@
       "last 1 safari version"
     ]
   },
-  "devDependencies": {}
+  "devDependencies": {
+    "@rollup/plugin-typescript": "^8.2.1",
+    "rollup": "^2.44.0"
+  }
 }
